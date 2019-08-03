@@ -2,66 +2,53 @@
 using UnityEngine;
 
 [ExecuteInEditMode]
+[SelectionBase]
+[RequireComponent(typeof(Waypoint))]
 public class QuadCubeEditor : MonoBehaviour
 {
-    public const int POSITION_Y = 0;
+    const int POSITION_Y = 0;
 
-    [SerializeField] [Range(1, 20)] private int snapIncrement = 10;
+    Vector2Int lastPosition;
+    Waypoint waypoint;
 
     [SerializeField] TextMesh textMesh;
 
-    private Vector3 lastPosition;
-
     private void Start()
     {
-        UpdateLastPosition();
+        waypoint = GetComponent<Waypoint>();
     }
 
-    private void UpdateLastPosition()
+    private void UpdateLastPosition(Vector2Int currentPosition)
     {
-        lastPosition = transform.position;
+        lastPosition = currentPosition;
     }
 
     void Update()
     {
-        if (transform.position != lastPosition)
+        UpdatePosition(waypoint.GetGridPosition());
+    }
+
+    private void UpdatePosition(Vector2Int currentPosition)
+    {
+        SnapPosition(currentPosition);
+
+        if (currentPosition != lastPosition)
         {
-            UpdatePosition();
+            UpdateDisplayInfo(currentPosition);
+            UpdateLastPosition(currentPosition);
         }
     }
 
-    private void UpdatePosition()
+    private void UpdateDisplayInfo(Vector2Int currentPosition)
     {
-        SnapTransformPositionHorizontal();
-        UpdateName();
-        UpdateTextMesh();
+        gameObject.name = "Quad Cube ( " + currentPosition.x + " , " + currentPosition.y + " )";
+        textMesh.text = currentPosition.x + "," + currentPosition.y;
     }
 
-    private void UpdateName()
+    private void SnapPosition(Vector2Int currentPosition)
     {
-        gameObject.name = "Quad Cube ( " + SnapIndex(transform.position.x) + " , " + SnapIndex(transform.position.z) + " )";
-    }
-
-    public void UpdateTextMesh()
-    {
-        textMesh.text = SnapIndex(transform.position.x) + "," + SnapIndex(transform.position.z);
-}
-
-    private void SnapTransformPositionHorizontal()
-    {
-        int snapPosX = SnapPosition(transform.position.x);
-        int snapPosZ = SnapPosition(transform.position.z);
-
-        transform.position = new Vector3(snapPosX, POSITION_Y, snapPosZ);
-    }
-
-    private int SnapIndex(float position)
-    {
-        return Mathf.RoundToInt(position) / snapIncrement;
-    }
-
-    private int SnapPosition(float position)
-    {
-        return SnapIndex(position) * snapIncrement;
+        float positionX = currentPosition.x * Waypoint.GRID_SIZE;
+        float positionZ = currentPosition.y * Waypoint.GRID_SIZE;
+        transform.position = new Vector3(positionX, POSITION_Y, positionZ);
     }
 }
