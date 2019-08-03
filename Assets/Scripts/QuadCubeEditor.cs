@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [ExecuteInEditMode]
 public class QuadCubeEditor : MonoBehaviour
@@ -9,15 +10,42 @@ public class QuadCubeEditor : MonoBehaviour
 
     [SerializeField] TextMesh textMesh;
 
-    void Update()
+    private Vector3 lastPosition;
+
+    private void Start()
     {
-        SnapTransformPositionHorizontal();
+        UpdateLastPosition();
     }
 
-    private void UpdateTextMesh(int posX, int posZ)
+    private void UpdateLastPosition()
     {
-        textMesh.text = SnapIndex(posX).ToString() + "," + SnapIndex(posZ).ToString();
+        lastPosition = transform.position;
     }
+
+    void Update()
+    {
+        if (transform.position != lastPosition)
+        {
+            UpdatePosition();
+        }
+    }
+
+    private void UpdatePosition()
+    {
+        SnapTransformPositionHorizontal();
+        UpdateName();
+        UpdateTextMesh();
+    }
+
+    private void UpdateName()
+    {
+        gameObject.name = "Quad Cube ( " + SnapIndex(transform.position.x) + " , " + SnapIndex(transform.position.z) + " )";
+    }
+
+    public void UpdateTextMesh()
+    {
+        textMesh.text = SnapIndex(transform.position.x) + "," + SnapIndex(transform.position.z);
+}
 
     private void SnapTransformPositionHorizontal()
     {
@@ -25,17 +53,15 @@ public class QuadCubeEditor : MonoBehaviour
         int snapPosZ = SnapPosition(transform.position.z);
 
         transform.position = new Vector3(snapPosX, POSITION_Y, snapPosZ);
-
-        UpdateTextMesh(snapPosX, snapPosZ);
     }
 
-    private int SnapIndex(int position)
+    private int SnapIndex(float position)
     {
-        return position / snapIncrement;
+        return Mathf.RoundToInt(position) / snapIncrement;
     }
 
     private int SnapPosition(float position)
     {
-        return Mathf.RoundToInt(position / snapIncrement) * snapIncrement;
+        return SnapIndex(position) * snapIncrement;
     }
 }
