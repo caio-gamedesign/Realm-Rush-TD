@@ -9,10 +9,27 @@ public class Pathfinder : MonoBehaviour
 
     [SerializeField] Waypoint start, end;
 
+    Vector2Int[] directions = {
+        Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left
+    };
+
     void Start()
     {
         LoadBlocks();
         ColorStartAndEnd();
+        ExploreNeighbours();
+    }
+
+    private void ExploreNeighbours()
+    {
+        foreach (Vector2Int direction in directions)
+        {
+            Vector2Int explorationCoordinates = start.GetGridPosition() + direction;
+            if (grid.ContainsKey(explorationCoordinates))
+            {
+                grid[explorationCoordinates].SetTopColor(Color.white);
+            }
+        }
     }
 
     private void ColorStartAndEnd()
