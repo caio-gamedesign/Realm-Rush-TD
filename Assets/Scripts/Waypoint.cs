@@ -11,6 +11,12 @@ public class Waypoint : MonoBehaviour
         return new Vector2Int(GridPosition(transform.position.x), GridPosition(transform.position.z));
     }
 
+    public void SetTopColor(Color color)
+    {
+        MeshRenderer meshRenderer = transform.Find("Quad Top").GetComponent<MeshRenderer>();
+        meshRenderer.material.color = color;
+    }
+
     private int GridPosition(float position)
     {
         return Mathf.RoundToInt(position / GRID_SIZE);

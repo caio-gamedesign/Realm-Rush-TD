@@ -7,9 +7,18 @@ public class Pathfinder : MonoBehaviour
 {
     Dictionary<Vector2Int, Waypoint> grid = new Dictionary<Vector2Int, Waypoint>();
 
+    [SerializeField] Waypoint start, end;
+
     void Start()
     {
         LoadBlocks();
+        ColorStartAndEnd();
+    }
+
+    private void ColorStartAndEnd()
+    {
+        start.SetTopColor(Color.black);
+        end.SetTopColor(Color.gray);
     }
 
     private void LoadBlocks()
@@ -17,7 +26,6 @@ public class Pathfinder : MonoBehaviour
         Waypoint[] waypoints = GetComponentsInChildren<Waypoint>();
         foreach(Waypoint waypoint in waypoints)
         {
-            print(waypoint.name);
             Vector2Int gridPosition = waypoint.GetGridPosition();
             bool isOverlapping = grid.ContainsKey(gridPosition);
             if (isOverlapping)
