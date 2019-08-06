@@ -5,100 +5,106 @@ using UnityEngine;
 
 public class Pathfinder : MonoBehaviour
 {
-    Dictionary<Vector2Int, Waypoint> grid = new Dictionary<Vector2Int, Waypoint>();
+    Dictionary<Vector2Int, Waypoint> grid;
 
-    [SerializeField] Waypoint start, end;
+    [SerializeField] Waypoint startWaypoint, endWaypoint;
 
-    Vector2Int[] directions = {
-        Vector2Int.up,
-        Vector2Int.right,
-        Vector2Int.down,
-        Vector2Int.left
-    };
+    public static readonly Vector2Int[] DIRECTIONS = new Vector2Int[] { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
 
     Queue<Waypoint> queue = new Queue<Waypoint>();
     bool isRunning = true;
 
-    void Start()
-    {
-        LoadBlocks();
-        ColorStartAndEnd();
-        Pathfind();
-    }
+    Waypoint searchCenter;
 
-    private void Pathfind()
+    private void QueueNeighbour(Waypoint neighbour)
     {
-        queue.Enqueue(start);
-
-        while (queue.Count > 0 && isRunning)
+        if (neighbour.isExplored == false && queue.Contains(neighbour) == false)
         {
-            Waypoint searchCenter = queue.Dequeue();
-            searchCenter.isExplored = true;
-            HaltIfEndFound(searchCenter);
-            ExploreNeighbours(searchCenter);
+            neighbour.SetTopColor(Color.black);
+            queue.Enqueue(neighbour);
+            neighbour.exploredFrom = searchCenter;
         }
-
-
     }
 
-    private void HaltIfEndFound(Waypoint searchCenter)
+    private void ExploreNeighbours()
     {
-        if (searchCenter == end)
+        if (!isRunning) return;
+
+        foreach (Vector2Int direction in DIRECTIONS)
+        {
+            Vector2Int neighboursCoordinates = searchCenter.GetGridPosition() + direction;
+            Waypoint neighbour;
+
+            if (grid.TryGetValue(neighboursCoordinates, out neighbour))
+            {
+                QueueNeighbour(neighbour);
+            }
+        }
+    }
+
+    private void HaltIfEndFound()
+    {
+        if (searchCenter == endWaypoint)
         {
             isRunning = false;
         }
     }
 
-    private void ExploreNeighbours(Waypoint from)
+    private void SetSearchCenter(Waypoint waypoint)
     {
-        if (isRunning == false)
-        {
-            return;
-        }
-
-        foreach (Vector2Int direction in directions)
-        {
-            Vector2Int neighboursCoordinates = from.GetGridPosition() + direction;
-            if (grid.ContainsKey(neighboursCoordinates))
-            {
-                QueueNeighbour(neighboursCoordinates);
-            }
-        }
+        searchCenter = waypoint;
+        searchCenter.isExplored = true;
     }
 
-    private void QueueNeighbour(Vector2Int neighboursCoordinates)
+    private void Pathfind()
     {
-        Waypoint neighbour = grid[neighboursCoordinates];
+        queue.Enqueue(startWaypoint);
 
-        if (neighbour.isExplored == false)
+        while (queue.Count > 0 && isRunning)
         {
-            neighbour.SetTopColor(Color.black);
-            queue.Enqueue(neighbour);
+            SetSearchCenter(queue.Dequeue());
+            HaltIfEndFound();
+            ExploreNeighbours();
         }
     }
 
     private void ColorStartAndEnd()
     {
-        start.SetTopColor(Color.white);
-        end.SetTopColor(Color.white);
+        startWaypoint.SetTopColor(Color.white);
+        endWaypoint.SetTopColor(Color.white);
     }
 
-    private void LoadBlocks()
+    private bool isWaypointDuplicated(Waypoint waypoint)
     {
+        bool isDuplicated = grid.ContainsKey(waypoint.GetGridPosition());
+
+        if (isDuplicated)
+        {
+            Debug.LogWarning("Duplicated waypoint: " + waypoint.name);
+        }
+
+        return isDuplicated;
+    }
+
+    private void CreateGrid()
+    {
+        grid = new Dictionary<Vector2Int, Waypoint>();
+
         Waypoint[] waypoints = GetComponentsInChildren<Waypoint>();
         foreach (Waypoint waypoint in waypoints)
         {
             Vector2Int gridPosition = waypoint.GetGridPosition();
-            bool isOverlapping = grid.ContainsKey(gridPosition);
-            if (isOverlapping)
-            {
-                Debug.LogWarning("Deleted Overlapping block " + waypoint + " with " + grid[gridPosition]);
-                Destroy(waypoint.gameObject);
-            }
-            else
+            if (isWaypointDuplicated(waypoint) == false)
             {
                 grid.Add(gridPosition, waypoint);
             }
         }
+    }
+
+    void Start()
+    {
+        CreateGrid();
+        ColorStartAndEnd();
+        Pathfind();
     }
 }

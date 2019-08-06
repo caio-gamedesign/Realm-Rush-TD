@@ -7,6 +7,9 @@ public class Waypoint : MonoBehaviour
     public const int GRID_SIZE = 10;
 
     public bool isExplored = false;
+    public Waypoint exploredFrom;
+
+    [SerializeField] Color exploredColor;
 
     public Vector2Int GetGridPosition()
     {
