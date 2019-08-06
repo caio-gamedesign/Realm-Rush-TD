@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7029170373209453909}
   - component: {fileID: 325995993629490259}
+  - component: {fileID: 7226669282785696537}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -46,9 +47,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToPan: {fileID: 1236683064477715498}
-  targetEnemy: {fileID: 0}
-  attackRange: 0
+  attackRange: 20
   bullets: {fileID: 4695723911994396117}
+--- !u!135 &7226669282785696537
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5508498526885304157}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4634095339679194890
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,7 +132,27 @@ PrefabInstance:
     - target: {fileID: 100501051083641567, guid: f5263674337abdf4c8617aba03c28594,
         type: 3}
       propertyPath: EmissionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100501051083641567, guid: f5263674337abdf4c8617aba03c28594,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100501051083641567, guid: f5263674337abdf4c8617aba03c28594,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.minMaxState
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100501051083641567, guid: f5263674337abdf4c8617aba03c28594,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100501051083641567, guid: f5263674337abdf4c8617aba03c28594,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5263674337abdf4c8617aba03c28594, type: 3}

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8200908545382515083}
   - component: {fileID: 7518752055137325068}
   - component: {fileID: 8223929467162489425}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Quad Top
-  m_TagString: Untagged
+  m_TagString: BlockFriendly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -88,7 +88,7 @@ MeshCollider:
   m_GameObject: {fileID: 2194878206434739297}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Convex: 0
   m_CookingOptions: 14
@@ -104,9 +104,9 @@ GameObject:
   - component: {fileID: 5432510174567363735}
   - component: {fileID: 5152599313515579506}
   - component: {fileID: 122020891057077127}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Label
-  m_TagString: Untagged
+  m_TagString: BlockFriendly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,9 +195,10 @@ GameObject:
   - component: {fileID: 606840977058608077}
   - component: {fileID: 6956151596391548383}
   - component: {fileID: 1528194606116327503}
-  m_Layer: 0
+  - component: {fileID: 6048895712898228628}
+  m_Layer: 8
   m_Name: Quad Cube
-  m_TagString: Untagged
+  m_TagString: BlockFriendly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -246,6 +247,20 @@ MonoBehaviour:
   isExplored: 0
   exploredFrom: {fileID: 0}
   exploredColor: {r: 0, g: 0, b: 0, a: 0}
+  label: {fileID: 2317347436112806462}
+--- !u!65 &6048895712898228628
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8409440578700579789}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: -5, z: 0}
 --- !u!1001 &7151314342270537995
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -256,6 +271,14 @@ PrefabInstance:
     - target: {fileID: 1457945536329988, guid: f27a4597efbf3694b95687e7aeef7fcc, type: 3}
       propertyPath: m_Name
       value: Block_Friendly
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457945536329988, guid: f27a4597efbf3694b95687e7aeef7fcc, type: 3}
+      propertyPath: m_TagString
+      value: BlockFriendly
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457945536329988, guid: f27a4597efbf3694b95687e7aeef7fcc, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4501762900964862, guid: f27a4597efbf3694b95687e7aeef7fcc, type: 3}
       propertyPath: m_LocalPosition.x

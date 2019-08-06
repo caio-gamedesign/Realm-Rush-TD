@@ -6,14 +6,50 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [SerializeField] Transform objectToPan;
-    [SerializeField] Transform targetEnemy;
+    Transform targetEnemy;
     [SerializeField] float attackRange = 20f;
     [SerializeField] ParticleSystem bullets;
 
     bool isShooting = false;
 
+    private void Awake()
+    {
+        SphereCollider sphereCollider = gameObject.GetComponent<SphereCollider>();
+        sphereCollider.isTrigger = true;
+        sphereCollider.radius = attackRange;
 
-    private void LateUpdate()
+        StopShooting();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Transform newEnemy = other.transform;
+            if (targetEnemy == null || CloserThanTargetEnemy(newEnemy))
+            {
+                targetEnemy = newEnemy;
+            }
+        }
+    }
+
+    private bool CloserThanTargetEnemy(Transform newEnemy)
+    {
+        float distanceNewEnemy = Vector3.Distance(transform.position, newEnemy.position);
+        float distanceTargetEnemy = Vector3.Distance(transform.position, targetEnemy.position);
+
+        return distanceNewEnemy < distanceTargetEnemy;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.transform == targetEnemy)
+        {
+            targetEnemy = null;
+        }
+    }
+
+    private void Update()
     {
         objectToPan.LookAt(targetEnemy);
 

@@ -43,16 +43,25 @@ public class Pathfinder : MonoBehaviour
     private void CalculatePath()
     {
         path = new List<Waypoint>();
-        path.Add(endWaypoint);
+
+        AddToPath(endWaypoint);
+                
         Waypoint previous = endWaypoint.exploredFrom;
         while (previous != startWaypoint)
         {
-            path.Add(previous);
+            AddToPath(previous);
             previous = previous.exploredFrom;
         }
 
-        path.Add(startWaypoint);
+        AddToPath(startWaypoint);
+
         path.Reverse();
+    }
+
+    private void AddToPath(Waypoint waypoint)
+    {
+        path.Add(waypoint);
+        waypoint.AllowsTowerPlacement = false;
     }
 
     private void QueueNeighbour(Waypoint neighbour)
@@ -135,6 +144,11 @@ public class Pathfinder : MonoBehaviour
             if (isWaypointDuplicated(waypoint) == false)
             {
                 grid.Add(gridPosition, waypoint);
+                waypoint.AllowsTowerPlacement = true;
+            }
+            else
+            {
+                Destroy(waypoint.gameObject);
             }
         }
     }

@@ -6,7 +6,7 @@ public class EnemyMovement : MonoBehaviour
 {
     Pathfinder pathfinder;
     List<Waypoint> path;
-    [SerializeField] float tickTime = 2f;
+    [SerializeField] float tickTime = 3f;
 
     private void Start()
     {

@@ -9,7 +9,21 @@ public class Waypoint : MonoBehaviour
     public bool isExplored = false;
     public Waypoint exploredFrom;
 
+    private bool allowsTowerPlacement = false;
+
+    public bool AllowsTowerPlacement
+    {
+        get { return allowsTowerPlacement; }
+        set
+        {
+            allowsTowerPlacement = value;
+            label.SetActive(!value);
+        }
+    }
+
     [SerializeField] Color exploredColor;
+
+    [SerializeField] GameObject label;
 
     public Vector2Int GetGridPosition()
     {
