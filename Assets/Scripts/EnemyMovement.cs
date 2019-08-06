@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] Pathfinder pathfinder;
+    Pathfinder pathfinder;
     List<Waypoint> path;
     [SerializeField] float tickTime = 2f;
 
     private void Start()
     {
+        pathfinder = FindObjectOfType<Pathfinder>();
         path = pathfinder.GetPath();
         StartCoroutine(FollowPath());
     }

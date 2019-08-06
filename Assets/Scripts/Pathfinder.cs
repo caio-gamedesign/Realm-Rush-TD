@@ -20,14 +20,27 @@ public class Pathfinder : MonoBehaviour
 
     public List<Waypoint> GetPath()
     {
-        CreateGrid();
-        ColorStartAndEnd();
-        BreadthFirstSearch();
-        CreatePath();
+        if (isPathCreated() == false)
+        {
+            CreatePath();
+        }
         return path;
     }
 
+    private bool isPathCreated()
+    {
+        return path.Count > 0;
+    }
+
     private void CreatePath()
+    {
+        CreateGrid();
+        ColorStartAndEnd();
+        BreadthFirstSearch();
+        CalculatePath();
+    }
+
+    private void CalculatePath()
     {
         path = new List<Waypoint>();
         path.Add(endWaypoint);
