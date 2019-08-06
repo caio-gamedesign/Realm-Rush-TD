@@ -16,6 +16,8 @@ public class Pathfinder : MonoBehaviour
 
     Waypoint searchCenter;
 
+    Waypoint[] waypoints;
+
     [SerializeField] List<Waypoint> path;
 
     public List<Waypoint> GetPath()
@@ -137,7 +139,17 @@ public class Pathfinder : MonoBehaviour
     {
         grid = new Dictionary<Vector2Int, Waypoint>();
 
-        Waypoint[] waypoints = GetComponentsInChildren<Waypoint>();
+        DeleteRandomWaypoints(Mathf.RoundToInt(transform.childCount/10));
+
+        waypoints = GetComponentsInChildren<Waypoint>();
+
+        startWaypoint = waypoints[UnityEngine.Random.Range(0, waypoints.Length)];
+
+        while (endWaypoint == null || endWaypoint == startWaypoint)
+        {
+            endWaypoint = waypoints[UnityEngine.Random.Range(0, waypoints.Length)];
+        }
+
         foreach (Waypoint waypoint in waypoints)
         {
             Vector2Int gridPosition = waypoint.GetGridPosition();
@@ -150,6 +162,15 @@ public class Pathfinder : MonoBehaviour
             {
                 Destroy(waypoint.gameObject);
             }
+        }
+    }
+
+    private void DeleteRandomWaypoints(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            GameObject childToDelete = transform.GetChild(UnityEngine.Random.Range(0, transform.childCount)).gameObject;
+            DestroyImmediate(childToDelete);
         }
     }
 }

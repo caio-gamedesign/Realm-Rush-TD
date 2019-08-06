@@ -17,7 +17,6 @@ public class TowerSpawner : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
             {
                 Transform objectHit = hit.transform;
-                Debug.Log("Raycast from mouse hitted: " + hit.transform.name, hit.transform);
                 Debug.DrawRay(ray.origin, ray.direction * 1000, Color.green, 60f);
 
 
