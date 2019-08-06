@@ -6,6 +6,7 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] Pathfinder pathfinder;
     List<Waypoint> path;
+    [SerializeField] float tickTime = 1f;
 
     private void Start()
     {
@@ -18,7 +19,7 @@ public class EnemyMovement : MonoBehaviour
         foreach(Waypoint waypoint in path)
         {
             transform.position = waypoint.transform.position;
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(tickTime);
         }
     }
 }
