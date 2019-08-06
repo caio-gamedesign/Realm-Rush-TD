@@ -9,12 +9,38 @@ public class Pathfinder : MonoBehaviour
 
     [SerializeField] Waypoint startWaypoint, endWaypoint;
 
-    public static readonly Vector2Int[] DIRECTIONS = new Vector2Int[] { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
+    static readonly Vector2Int[] DIRECTIONS = new Vector2Int[] { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
 
     Queue<Waypoint> queue = new Queue<Waypoint>();
     bool isRunning = true;
 
     Waypoint searchCenter;
+
+    [SerializeField] List<Waypoint> path;
+
+    public List<Waypoint> GetPath()
+    {
+        CreateGrid();
+        ColorStartAndEnd();
+        BreadthFirstSearch();
+        CreatePath();
+        return path;
+    }
+
+    private void CreatePath()
+    {
+        path = new List<Waypoint>();
+        path.Add(endWaypoint);
+        Waypoint previous = endWaypoint.exploredFrom;
+        while (previous != startWaypoint)
+        {
+            path.Add(previous);
+            previous = previous.exploredFrom;
+        }
+
+        path.Add(startWaypoint);
+        path.Reverse();
+    }
 
     private void QueueNeighbour(Waypoint neighbour)
     {
@@ -33,9 +59,8 @@ public class Pathfinder : MonoBehaviour
         foreach (Vector2Int direction in DIRECTIONS)
         {
             Vector2Int neighboursCoordinates = searchCenter.GetGridPosition() + direction;
-            Waypoint neighbour;
 
-            if (grid.TryGetValue(neighboursCoordinates, out neighbour))
+            if (grid.TryGetValue(neighboursCoordinates, out Waypoint neighbour))
             {
                 QueueNeighbour(neighbour);
             }
@@ -56,7 +81,7 @@ public class Pathfinder : MonoBehaviour
         searchCenter.isExplored = true;
     }
 
-    private void Pathfind()
+    private void BreadthFirstSearch()
     {
         queue.Enqueue(startWaypoint);
 
@@ -99,12 +124,5 @@ public class Pathfinder : MonoBehaviour
                 grid.Add(gridPosition, waypoint);
             }
         }
-    }
-
-    void Start()
-    {
-        CreateGrid();
-        ColorStartAndEnd();
-        Pathfind();
     }
 }
