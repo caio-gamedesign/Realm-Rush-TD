@@ -6,17 +6,20 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [SerializeField] Transform objectToPan;
-    Transform targetEnemy;
+    Transform currentTarget;
     [SerializeField] float attackRange = 20f;
     [SerializeField] ParticleSystem bullets;
 
     bool isShooting = false;
+    [SerializeField] private List<Transform> targets;
 
     private void Awake()
     {
         SphereCollider sphereCollider = gameObject.GetComponent<SphereCollider>();
         sphereCollider.isTrigger = true;
         sphereCollider.radius = attackRange;
+
+        targets = new List<Transform>();
 
         StopShooting();
     }
@@ -25,41 +28,68 @@ public class Tower : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Transform newEnemy = other.transform;
-            if (targetEnemy == null || CloserThanTargetEnemy(newEnemy))
-            {
-                targetEnemy = newEnemy;
-            }
+            Transform enemy = other.transform;
+            targets.Add(enemy);
         }
     }
 
     private bool CloserThanTargetEnemy(Transform newEnemy)
     {
         float distanceNewEnemy = Vector3.Distance(transform.position, newEnemy.position);
-        float distanceTargetEnemy = Vector3.Distance(transform.position, targetEnemy.position);
+        float distanceTargetEnemy = Vector3.Distance(transform.position, currentTarget.position);
 
         return distanceNewEnemy < distanceTargetEnemy;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.transform == targetEnemy)
+        if (other.CompareTag("Enemy"))
         {
-            targetEnemy = null;
+            Transform enemy = other.transform;
+            targets.Remove(enemy);
         }
     }
 
     private void Update()
     {
-        objectToPan.LookAt(targetEnemy);
+        RemoveDeadTargets();
+        SetCurrentTarget();
 
-        if (targetEnemy && Vector3.Distance(targetEnemy.transform.position, transform.position) <= attackRange)
-        {   
-            ShootEnemy();
+        if (currentTarget)
+        {
+            objectToPan.LookAt(currentTarget);
+
+            if (currentTarget && Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange)
+            {
+                ShootEnemy();
+            }
         }
         else if (isShooting)
         {
             StopShooting();
+        }
+    }
+
+    private void RemoveDeadTargets()
+    {
+        for (int i = targets.Count - 1; i >= 0; i--)
+        {
+            if (targets[i] == null)
+            {
+                targets.RemoveAt(i);
+            }
+        }
+    }
+
+    private void SetCurrentTarget()
+    {
+        if (targets.Count <= 0)
+        {
+            currentTarget = null;
+        }
+        else
+        {
+            currentTarget = targets[0];
         }
     }
 
