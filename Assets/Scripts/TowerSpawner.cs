@@ -46,6 +46,8 @@ public class TowerSpawner : MonoBehaviour
             tower = towers.Dequeue();
             tower.waypoint.EnableTowerPlacement(false);
             tower.transform.position = waypoint.transform.position;
+
+            tower.Refresh();
         }
 
         tower.waypoint = waypoint;

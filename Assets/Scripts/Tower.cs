@@ -21,6 +21,11 @@ public class Tower : MonoBehaviour
         sphereCollider.isTrigger = true;
         sphereCollider.radius = attackRange;
 
+        Refresh();
+    }
+
+    public void Refresh()
+    {
         targets = new List<Transform>();
 
         StopShooting();
@@ -100,6 +105,8 @@ public class Tower : MonoBehaviour
         var em = bullets.emission;
         em.enabled = false;
         isShooting = false;
+
+        objectToPan.rotation = Quaternion.identity;
     }
 
     private void ShootEnemy()
