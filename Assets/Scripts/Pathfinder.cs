@@ -63,7 +63,7 @@ public class Pathfinder : MonoBehaviour
     private void AddToPath(Waypoint waypoint)
     {
         path.Add(waypoint);
-        waypoint.AllowsTowerPlacement = false;
+        waypoint.DisableTowerPlacement();
     }
 
     private void QueueNeighbour(Waypoint neighbour)
@@ -156,7 +156,7 @@ public class Pathfinder : MonoBehaviour
             if (isWaypointDuplicated(waypoint) == false)
             {
                 grid.Add(gridPosition, waypoint);
-                waypoint.AllowsTowerPlacement = true;
+                waypoint.EnableTowerPlacement();
             }
             else
             {

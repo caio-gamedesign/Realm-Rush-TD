@@ -11,19 +11,23 @@ public class Waypoint : MonoBehaviour
 
     private bool allowsTowerPlacement = false;
 
-    public bool AllowsTowerPlacement
-    {
-        get { return allowsTowerPlacement; }
-        set
-        {
-            allowsTowerPlacement = value;
-            label.SetActive(!value);
-        }
-    }
-
     [SerializeField] Color exploredColor;
 
     [SerializeField] GameObject label;
+
+    public bool AllowsTowerPlacement { get => allowsTowerPlacement; }
+
+    public void EnableTowerPlacement(bool showLabel = false)
+    {
+        allowsTowerPlacement = true;
+        label.SetActive(showLabel);
+    }
+
+    public void DisableTowerPlacement(bool showLabel = true)
+    {
+        allowsTowerPlacement = false;
+        label.SetActive(showLabel);
+    }
 
     public Vector2Int GetGridPosition()
     {

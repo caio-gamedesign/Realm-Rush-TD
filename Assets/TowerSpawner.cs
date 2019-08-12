@@ -17,13 +17,14 @@ public class TowerSpawner : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask))
             {
                 Transform objectHit = hit.transform;
-                Debug.DrawRay(ray.origin, ray.direction * 1000, Color.green, 60f);
+                Debug.DrawRay(ray.origin, ray.direction * Camera.main.farClipPlane, Color.green, 60f);
 
 
                 Waypoint waypoint = hit.transform.GetComponent<Waypoint>();
                 if (waypoint && waypoint.AllowsTowerPlacement)
                 {
                     Instantiate(tower, waypoint.transform.position, Quaternion.identity, transform);
+                    waypoint.DisableTowerPlacement(false);
                 }
             }
         }
