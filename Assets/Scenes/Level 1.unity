@@ -7796,7 +7796,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077fd378afff7e846a20e3ead356cb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tower: {fileID: 5508498526885304157, guid: f33ef3dac31dbe048b699b48b7c2774f, type: 3}
+  towerPrefab: {fileID: 5508498526885304157, guid: f33ef3dac31dbe048b699b48b7c2774f,
+    type: 3}
+  maxTowers: 3
 --- !u!4 &1603169930
 Transform:
   m_ObjectHideFlags: 0

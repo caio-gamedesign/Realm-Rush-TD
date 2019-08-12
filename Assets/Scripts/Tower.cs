@@ -13,6 +13,8 @@ public class Tower : MonoBehaviour
     bool isShooting = false;
     [SerializeField] private List<Transform> targets;
 
+    public Waypoint waypoint;
+
     private void Awake()
     {
         SphereCollider sphereCollider = gameObject.GetComponent<SphereCollider>();
