@@ -62,14 +62,11 @@ public class Tower : MonoBehaviour
         RemoveDeadTargets();
         SetCurrentTarget();
 
-        if (currentTarget)
+        if (currentTarget && Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange)
         {
             objectToPan.LookAt(currentTarget);
+            ShootEnemy();
 
-            if (currentTarget && Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange)
-            {
-                ShootEnemy();
-            }
         }
         else if (isShooting)
         {

@@ -9,6 +9,10 @@ public class EnemyDamage : MonoBehaviour
     [SerializeField] ParticleSystem hitParticle;
     [SerializeField] ParticleSystem deathParticle;
 
+    [SerializeField] private AudioClip hitAudioClip;
+    [SerializeField] private AudioClip deathAudioClip;
+    [SerializeField] private AudioSource audioSource;
+
     private void OnParticleCollision(GameObject other)
     {
         ProcessHit();
@@ -20,13 +24,17 @@ public class EnemyDamage : MonoBehaviour
 
     private void Die()
     {
-        Destroy(gameObject);
+        GetComponentInChildren<MeshRenderer>().enabled = false;
         Instantiate(deathParticle, transform.position, Quaternion.identity);
+        AudioSource.PlayClipAtPoint(deathAudioClip, Camera.main.transform.position);
+
+        Destroy(gameObject);
     }
 
     private void ProcessHit()
     {
         hitPoints--;
         hitParticle.Play();
+        audioSource.PlayOneShot(hitAudioClip);
     }
 }
