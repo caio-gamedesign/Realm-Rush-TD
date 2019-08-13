@@ -7,6 +7,7 @@ public class EnemyMovement : MonoBehaviour
     Pathfinder pathfinder;
     List<Waypoint> path;
     [SerializeField] float tickTime = 3f;
+    [SerializeField] ParticleSystem goalParticle;
 
     private void Start()
     {
@@ -22,5 +23,13 @@ public class EnemyMovement : MonoBehaviour
             transform.position = waypoint.transform.position;
             yield return new WaitForSeconds(tickTime);
         }
+
+        SelfDestruct();
+    }
+
+    private void SelfDestruct()
+    {
+        Destroy(gameObject);
+        Instantiate(goalParticle, transform.position, Quaternion.identity);
     }
 }
