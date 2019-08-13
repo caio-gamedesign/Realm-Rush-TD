@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acfc69610ba953428c4a7c54be0baaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickTime: 3
+  tickTime: 0.5
 --- !u!1 &1646541640735296
 GameObject:
   m_ObjectHideFlags: 0
@@ -19195,6 +19195,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy Hit Particles
       objectReference: {fileID: 0}
+    - target: {fileID: 198801791596541968, guid: dcf9cd10c07cf0c49863969befadb243,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4208721479801298, guid: dcf9cd10c07cf0c49863969befadb243, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -19239,17 +19244,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 198801791596541968, guid: dcf9cd10c07cf0c49863969befadb243,
+    - target: {fileID: 198997797312625902, guid: dcf9cd10c07cf0c49863969befadb243,
         type: 3}
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 198554004130006392, guid: dcf9cd10c07cf0c49863969befadb243,
-        type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 198997797312625902, guid: dcf9cd10c07cf0c49863969befadb243,
         type: 3}
       propertyPath: playOnAwake
       value: 0

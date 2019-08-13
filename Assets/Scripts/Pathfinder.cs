@@ -12,42 +12,17 @@ public class Pathfinder : MonoBehaviour
     static readonly Vector2Int[] DIRECTIONS = new Vector2Int[] { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
 
     Queue<Waypoint> queue = new Queue<Waypoint>();
-    bool isRunning = true;
-
-    Waypoint searchCenter;
-
-    Waypoint[] waypoints;
 
     [SerializeField] List<Waypoint> path;
 
-    public List<Waypoint> GetPath()
-    {
-        if (isPathCreated() == false)
-        {
-            CreatePath();
-        }
-        return path;
-    }
-
-    private bool isPathCreated()
-    {
-        return path.Count > 0;
-    }
-
-    private void CreatePath()
-    {
-        CreateGrid();
-        ColorStartAndEnd();
-        BreadthFirstSearch();
-        CalculatePath();
-    }
+    [SerializeField] Vector2Int[] randomDirections;
 
     private void CalculatePath()
     {
         path = new List<Waypoint>();
 
         AddToPath(endWaypoint);
-                
+
         Waypoint previous = endWaypoint.exploredFrom;
         while (previous != startWaypoint)
         {
@@ -66,61 +41,79 @@ public class Pathfinder : MonoBehaviour
         waypoint.DisableTowerPlacement();
     }
 
-    private void QueueNeighbour(Waypoint neighbour)
+    private void QueueNeighbour(Waypoint neighbour, Waypoint exploredFrom)
     {
         if (neighbour.isExplored == false && queue.Contains(neighbour) == false)
         {
             neighbour.SetTopColor(Color.black);
             queue.Enqueue(neighbour);
-            neighbour.exploredFrom = searchCenter;
+            neighbour.exploredFrom = exploredFrom;
         }
     }
 
-    private void ExploreNeighbours()
+    private void ExploreNeighbours(Waypoint searchCenter)
     {
-        if (!isRunning) return;
+        randomDirections = RandomDirections();
 
-        foreach (Vector2Int direction in DIRECTIONS)
+        //foreach (Vector2Int direction in DIRECTIONS)
+        foreach (Vector2Int direction in randomDirections)
         {
             Vector2Int neighboursCoordinates = searchCenter.GetGridPosition() + direction;
 
             if (grid.TryGetValue(neighboursCoordinates, out Waypoint neighbour))
             {
-                QueueNeighbour(neighbour);
+                QueueNeighbour(neighbour, searchCenter);
             }
         }
     }
 
-    private void HaltIfEndFound()
+    private Vector2Int[] RandomDirections()
     {
-        if (searchCenter == endWaypoint)
-        {
-            isRunning = false;
-        }
-    }
+        Vector2Int[] randomDirections = new Vector2Int[DIRECTIONS.Length];
+        int[] indexes = new int[randomDirections.Length];
 
-    private void SetSearchCenter(Waypoint waypoint)
-    {
-        searchCenter = waypoint;
-        searchCenter.isExplored = true;
+        for (int i = 0; i < indexes.Length; i++)
+        {
+            indexes[i] = i;
+        }
+
+        for (int i = 0; i < randomDirections.Length; i++)
+        {
+            int randomIndex = 0;
+            int index = -1;
+
+            while (index == -1)
+            {
+                randomIndex = UnityEngine.Random.Range(0, indexes.Length);
+                index = indexes[randomIndex];
+            }
+                        
+            indexes[randomIndex] = -1;
+            randomDirections[i] = DIRECTIONS[index];
+        }
+
+        return randomDirections;
     }
 
     private void BreadthFirstSearch()
     {
+        bool isRunning = true;
         queue.Enqueue(startWaypoint);
 
         while (queue.Count > 0 && isRunning)
         {
-            SetSearchCenter(queue.Dequeue());
-            HaltIfEndFound();
-            ExploreNeighbours();
-        }
-    }
+            Waypoint searchCenter = queue.Dequeue();
+            searchCenter.isExplored = true;
 
-    private void ColorStartAndEnd()
-    {
-        startWaypoint.SetTopColor(Color.white);
-        endWaypoint.SetTopColor(Color.white);
+            if (searchCenter == endWaypoint)
+            {
+                isRunning = false;
+            }
+            else
+            {
+                ExploreNeighbours(searchCenter);
+            }
+        }
     }
 
     private bool isWaypointDuplicated(Waypoint waypoint)
@@ -139,23 +132,13 @@ public class Pathfinder : MonoBehaviour
     {
         grid = new Dictionary<Vector2Int, Waypoint>();
 
-        DeleteRandomWaypoints(Mathf.RoundToInt(transform.childCount/10));
-
-        waypoints = GetComponentsInChildren<Waypoint>();
-
-        startWaypoint = waypoints[UnityEngine.Random.Range(0, waypoints.Length)];
-
-        while (endWaypoint == null || endWaypoint == startWaypoint)
-        {
-            endWaypoint = waypoints[UnityEngine.Random.Range(0, waypoints.Length)];
-        }
+        Waypoint[] waypoints = GetComponentsInChildren<Waypoint>();
 
         foreach (Waypoint waypoint in waypoints)
         {
-            Vector2Int gridPosition = waypoint.GetGridPosition();
             if (isWaypointDuplicated(waypoint) == false)
             {
-                grid.Add(gridPosition, waypoint);
+                grid.Add(waypoint.GetGridPosition(), waypoint);
                 waypoint.EnableTowerPlacement();
             }
             else
@@ -165,12 +148,24 @@ public class Pathfinder : MonoBehaviour
         }
     }
 
-    private void DeleteRandomWaypoints(int amount)
+    private void CreatePath()
     {
-        for (int i = 0; i < amount; i++)
+        CreateGrid();
+        BreadthFirstSearch();
+        CalculatePath();
+    }
+
+    private bool isPathEmpty()
+    {
+        return path.Count <= 0;
+    }
+
+    public List<Waypoint> GetPath()
+    {
+        if (isPathEmpty())
         {
-            GameObject childToDelete = transform.GetChild(UnityEngine.Random.Range(0, transform.childCount)).gameObject;
-            DestroyImmediate(childToDelete);
+            CreatePath();
         }
+        return path;
     }
 }
