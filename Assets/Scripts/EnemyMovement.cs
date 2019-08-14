@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,15 +22,22 @@ public class EnemyMovement : MonoBehaviour
         foreach(Waypoint waypoint in path)
         {
             transform.position = waypoint.transform.position;
+            if(FinishedPath(waypoint))
+            {
+                SelfDestruct();
+            }
             yield return new WaitForSeconds(tickTime);
         }
+    }
 
-        SelfDestruct();
+    private bool FinishedPath(Waypoint waypoint)
+    {
+        return waypoint == path[path.Count - 1];
     }
 
     private void SelfDestruct()
     {
-        Destroy(gameObject);
         Instantiate(goalParticle, transform.position, Quaternion.identity);
+        Destroy(gameObject, .1f);
     }
 }

@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d852407519340741a8d1e620bacffdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPoints: 3
+  hitPoints: 10
   hitParticle: {fileID: 198801791596541968, guid: dcf9cd10c07cf0c49863969befadb243,
     type: 3}
   deathParticle: {fileID: 198537984209914932, guid: 1a51bfda454239a41afb7dee687c6ac0,
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acfc69610ba953428c4a7c54be0baaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickTime: 3
+  tickTime: 1.5
   goalParticle: {fileID: 198801791596541968, guid: 38eeab8b719fe7e47a7a86e39a3edba7,
     type: 3}
 --- !u!82 &5876000219796913934

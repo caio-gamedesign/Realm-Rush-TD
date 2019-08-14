@@ -10,8 +10,9 @@ public class Tower : MonoBehaviour
     [SerializeField] float attackRange = 20f;
     [SerializeField] ParticleSystem bullets;
 
-    bool isShooting = false;
     [SerializeField] private List<Transform> targets;
+
+    private bool isShooting = false;
 
     public Waypoint waypoint;
 
@@ -59,16 +60,13 @@ public class Tower : MonoBehaviour
 
     private void Update()
     {
-        RemoveDeadTargets();
         SetCurrentTarget();
 
-        if (currentTarget && Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange)
+        if (currentTarget)
         {
-            objectToPan.LookAt(currentTarget);
-            ShootEnemy();
-
+            StartShooting();
         }
-        else if (isShooting)
+        else if(isShooting)
         {
             StopShooting();
         }
@@ -87,29 +85,26 @@ public class Tower : MonoBehaviour
 
     private void SetCurrentTarget()
     {
-        if (targets.Count <= 0)
-        {
-            currentTarget = null;
-        }
-        else
-        {
-            currentTarget = targets[0];
-        }
+        RemoveDeadTargets();
+        currentTarget = (targets.Count <= 0) ? null : targets[0];
     }
 
     private void StopShooting()
     {
         var em = bullets.emission;
         em.enabled = false;
-        isShooting = false;
 
         objectToPan.rotation = Quaternion.identity;
+        isShooting = false;
     }
 
-    private void ShootEnemy()
+    private void StartShooting()
     {
         var em = bullets.emission;
         em.enabled = true;
+
+        objectToPan.LookAt(currentTarget);
+
         isShooting = true;
     }
 }

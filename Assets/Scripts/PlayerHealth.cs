@@ -20,9 +20,13 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        health -= damage;
-        audioSource.PlayOneShot(takingDamageAudioClip);
-        UpdateHealthText();
+        Debug.Log(other.tag);
+        if (other.CompareTag("Enemy"))
+        {
+            health -= damage;
+            audioSource.PlayOneShot(takingDamageAudioClip);
+            UpdateHealthText();
+        }
     }
 
     private void UpdateHealthText()
